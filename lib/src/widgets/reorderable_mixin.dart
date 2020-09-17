@@ -10,20 +10,18 @@ mixin ReorderableMixin {
     Size draggingFeedbackSize,
     Axis direction,
   ) {
+    final Widget returnedWidget = FadeTransition(opacity: entranceController, child: child);
     if (null == draggingFeedbackSize) {
       return SizeTransitionWithIntrinsicSize(
         sizeFactor: entranceController,
         axis: direction,
-        child: FadeTransition(
-          opacity: entranceController,
-          child: child,
-        ),
+        child: returnedWidget,
       );
     } else {
       var transition = SizeTransition(
         sizeFactor: entranceController,
         axis: direction,
-        child: FadeTransition(opacity: entranceController, child: child),
+        child: returnedWidget,
       );
 
       BoxConstraints contentSizeConstraints = BoxConstraints.loose(draggingFeedbackSize);
@@ -33,31 +31,27 @@ mixin ReorderableMixin {
 
   @protected
   Widget makeDisappearingWidget(
-      Widget child,
-      AnimationController ghostController,
-      Size draggingFeedbackSize,
-      Axis direction,
-      ) {
+    Widget child,
+    AnimationController ghostController,
+    Size draggingFeedbackSize,
+    Axis direction,
+  ) {
+    final Widget returnedWidget = FadeTransition(opacity: ghostController, child: child);
     if (null == draggingFeedbackSize) {
       return SizeTransitionWithIntrinsicSize(
         sizeFactor: ghostController,
         axis: direction,
-        child: FadeTransition(
-          opacity: ghostController,
-          child: child,
-        ),
+        child: returnedWidget,
       );
     } else {
       var transition = SizeTransition(
         sizeFactor: ghostController,
         axis: direction,
-        child: FadeTransition(opacity: ghostController, child: child),
+        child: returnedWidget,
       );
 
-      BoxConstraints contentSizeConstraints =
-      BoxConstraints.loose(draggingFeedbackSize);
-      return ConstrainedBox(
-          constraints: contentSizeConstraints, child: transition);
+      BoxConstraints contentSizeConstraints = BoxConstraints.loose(draggingFeedbackSize);
+      return ConstrainedBox(constraints: contentSizeConstraints, child: transition);
     }
   }
 }
